@@ -108,7 +108,6 @@ class Game {
             }
         }
     }
-
     moveBall() {
         if (this.x + this.dx > this.canvas.width - this.ballRadius || this.x + this.dx < this.ballRadius) {
             this.dx = -this.dx;
@@ -118,6 +117,17 @@ class Game {
         } else if (this.y + this.dy > this.canvas.height - this.ballRadius) {
             if (this.x > this.paddleX && this.x < this.paddleX + this.paddleWidth) {
                 this.dy = -this.dy;
+                
+                // Calcula a posição relativa da bola em relação ao centro da plataforma
+                const relativePosition = (this.x - this.paddleX) / this.paddleWidth;
+                
+                // Define o ângulo de saída com base na posição relativa da bola
+                let angleChange = (relativePosition - 0.5) * Math.PI / 3; // Máximo de 30 graus para a esquerda ou direita
+                
+                // Aplica a mudança no ângulo de saída
+                const speed = Math.sqrt(this.dx * this.dx + this.dy * this.dy); // Mantém a velocidade constante
+                this.dx = Math.sin(angleChange) * speed;
+                this.dy = -Math.cos(angleChange) * speed;
             } else {
                 this.lives--;
                 if (!this.lives) {
@@ -137,11 +147,13 @@ class Game {
                 }
             }
         }
-
+    
         this.paddleMovement();
         this.x += this.dx;
         this.y += this.dy;
     }
+    
+    
 
     paddleMovement() {
         if (this.rightPressed && this.paddleX < this.canvas.width - this.paddleWidth) {
