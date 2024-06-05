@@ -48,7 +48,7 @@ class Draw {
                     if (bricks[c][r].isBonus === 0)
                         this.ctx.fillStyle = this.defaultFillColor;
                     else
-                        this.ctx.fillStyle = "#FF8C00"; // Cor alternativa para bônus
+                        this.ctx.fillStyle = "#FF8C00"; 
                     this.ctx.fill();
                     this.ctx.strokeStyle = this.defaultBorderColor;
                     this.ctx.lineWidth = this.defaultBorderWidth;

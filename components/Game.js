@@ -4,10 +4,11 @@ class Game {
         this.ctx = ctx;
         this.drawFunctions = new Draw(this.ctx, this.canvas);
         this.ballRadius = 10;
+        this.level = 1;
         this.x = this.canvas.width / 2;
         this.y = this.canvas.height - 30;
-        this.dx = 3;
-        this.dy = -3;
+        this.dx = 3*2;
+        this.dy = -3*2;
         this.paddleHeight = 10;
         this.paddleWidth = 75;
         this.paddleX = (this.canvas.width - this.paddleWidth) / 2;
@@ -55,6 +56,7 @@ class Game {
 
     startGame() {
         requestAnimationFrame(() => this.draw());
+        passLevel()
     }
 
     draw() {
@@ -72,8 +74,9 @@ class Game {
         this.drawFunctions.drawBall(this.x, this.y, this.ballRadius);
         this.drawFunctions.drawPaddle(this.paddleX, this.paddleWidth, this.paddleHeight);
         this.drawFunctions.drawText("Score: " + this.score, 8, 20);
-        this.drawFunctions.drawText("High Score: " + this.highscore, this.canvas.width / 2 - 20, 20);
-        this.drawFunctions.drawText("Lives: " + this.lives, this.canvas.width - 65, 20);
+        this.drawFunctions.drawText("High Score: " + this.highscore, this.canvas.width / 2 - 90, 20);
+        this.drawFunctions.drawText("Lives: " + this.lives, this.canvas.width / 2 + 80, 20);
+        this.drawFunctions.drawText("Level: " + this.level, this.canvas.width - 65, 20);
         this.collisionDetection();
         this.moveBall();
         requestAnimationFrame(() => this.draw());
@@ -97,10 +100,12 @@ class Game {
                         if (this.score > this.highscore) this.highscore = this.score;
                         if (this.brickHit === this.brickRowCount * this.brickColumnCount) {
                             this.winSound.play();
+                         
                             setTimeout(() => {
                                 alert("YOU WIN, CONGRATS!");
                                 this.restart();
                             });
+                            passLevel()
                             return;
                         }
                     }
@@ -108,6 +113,13 @@ class Game {
             }
         }
     }
+
+    passLevel() {
+        this.level++;
+        this.dx = (this.dx > 0) ? this.level + 2 : -(this.level + 2);
+        this.dy = (this.dy > 0) ? this.level + 2 : -(this.level + 2);
+    }
+
     moveBall() {
         if (this.x + this.dx > this.canvas.width - this.ballRadius || this.x + this.dx < this.ballRadius) {
             this.dx = -this.dx;
@@ -118,15 +130,12 @@ class Game {
             if (this.x > this.paddleX && this.x < this.paddleX + this.paddleWidth) {
                 this.dy = -this.dy;
                 
-                // Calcula a posição relativa da bola em relação ao centro da plataforma
                 const relativePosition = (this.x - this.paddleX) / this.paddleWidth;
                 
-                // Define o ângulo de saída com base na posição relativa da bola
-                let angleChange = (relativePosition - 0.5) * Math.PI / 3; // Máximo de 30 graus para a esquerda ou direita
+                let angleChange = (relativePosition - 0.5) * Math.PI / 3; 
                 
-                // Aplica a mudança no ângulo de saída
-                const speed = Math.sqrt(this.dx * this.dx + this.dy * this.dy); // Mantém a velocidade constante
-                this.dx = Math.sin(angleChange) * speed;
+                const speed = Math.sqrt(this.dx * this.dx + this.dy * this.dy) 
+                this.dx = Math.sin(angleChange) * speed ;
                 this.dy = -Math.cos(angleChange) * speed;
             } else {
                 this.lives--;
