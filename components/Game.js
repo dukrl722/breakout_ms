@@ -4,12 +4,13 @@ class Game {
         this.ctx = ctx;
         this.drawFunctions = new Draw(this.ctx, this.canvas);
         this.ballRadius = 10;
+        this.level = 1;
         this.x = this.canvas.width / 2;
         this.y = this.canvas.height - 30;
         this.dx = 3;
         this.dy = -3;
         this.paddleHeight = 10;
-        this.paddleWidth = 75;
+        this.paddleWidth = 100;
         this.paddleX = (this.canvas.width - this.paddleWidth) / 2;
         this.rightPressed = false;
         this.leftPressed = false;
@@ -28,8 +29,8 @@ class Game {
         this.winSound = new Audio("assets/Audio/win.mp3");
         this.fallSound = new Audio("assets/Audio/fall.mp3");
         this.brickHit = 0;
-        this.storedx = 0;
-        this.storedy = 0;
+        this.storedx = 3; 
+        this.storedy = -3; 
         this.bricks = [];
 
         this.createBricks();
@@ -42,7 +43,6 @@ class Game {
                 this.bricks[c][r] = { x: 0, y: 0, status: 1, isBonus: 0 };
             }
         }
-        // Set bonus bricks
         this.bricks[0][Math.floor(Math.random() * 5)].isBonus = 1;
         this.bricks[1][Math.floor(Math.random() * 5)].isBonus = 1;
         this.bricks[2][Math.floor(Math.random() * 5)].isBonus = 1;
@@ -72,8 +72,9 @@ class Game {
         this.drawFunctions.drawBall(this.x, this.y, this.ballRadius);
         this.drawFunctions.drawPaddle(this.paddleX, this.paddleWidth, this.paddleHeight);
         this.drawFunctions.drawText("Score: " + this.score, 8, 20);
-        this.drawFunctions.drawText("High Score: " + this.highscore, this.canvas.width / 2 - 20, 20);
-        this.drawFunctions.drawText("Lives: " + this.lives, this.canvas.width - 65, 20);
+        this.drawFunctions.drawText("High Score: " + this.highscore, this.canvas.width / 2 - 90, 20);
+        this.drawFunctions.drawText("Lives: " + this.lives, this.canvas.width / 2 + 80, 20);
+        this.drawFunctions.drawText("Level: " + this.level, this.canvas.width - 65, 20);
         this.collisionDetection();
         this.moveBall();
         requestAnimationFrame(() => this.draw());
@@ -97,8 +98,11 @@ class Game {
                         if (this.score > this.highscore) this.highscore = this.score;
                         if (this.brickHit === this.brickRowCount * this.brickColumnCount) {
                             this.winSound.play();
+                            this.level++;
+
                             setTimeout(() => {
                                 alert("YOU WIN, CONGRATS!");
+                                this.paddleWidth = this.paddleWidth - 15;
                                 this.restart();
                             });
                             return;
@@ -108,6 +112,7 @@ class Game {
             }
         }
     }
+
     moveBall() {
         if (this.x + this.dx > this.canvas.width - this.ballRadius || this.x + this.dx < this.ballRadius) {
             this.dx = -this.dx;
@@ -118,15 +123,12 @@ class Game {
             if (this.x > this.paddleX && this.x < this.paddleX + this.paddleWidth) {
                 this.dy = -this.dy;
                 
-                // Calcula a posição relativa da bola em relação ao centro da plataforma
                 const relativePosition = (this.x - this.paddleX) / this.paddleWidth;
                 
-                // Define o ângulo de saída com base na posição relativa da bola
-                let angleChange = (relativePosition - 0.5) * Math.PI / 3; // Máximo de 30 graus para a esquerda ou direita
+                let angleChange = (relativePosition - 0.5) * Math.PI / 3; 
                 
-                // Aplica a mudança no ângulo de saída
-                const speed = Math.sqrt(this.dx * this.dx + this.dy * this.dy); // Mantém a velocidade constante
-                this.dx = Math.sin(angleChange) * speed;
+                const speed = Math.sqrt(this.dx * this.dx + this.dy * this.dy) 
+                this.dx = Math.sin(angleChange) * speed ;
                 this.dy = -Math.cos(angleChange) * speed;
             } else {
                 this.lives--;
@@ -134,8 +136,12 @@ class Game {
                     this.loseSound.play();
                     setTimeout(() => {
                         alert("GAME OVER");
+                        this.score = 0
+                        this.lives = 3
+                        this.level = 1
+                        this.paddleWidth = 100
                         this.restart();
-                    }, 1000);
+                    }, 0);
                     return;
                 } else {
                     this.fallSound.play();
@@ -164,13 +170,12 @@ class Game {
     }
 
     restart() {
-        this.score = 0;
-        this.brickHit = 0;
-        this.lives = 3;
         this.createBricks();
         this.x = this.canvas.width / 2;
         this.y = this.canvas.height - 30;
-        this.dx = this.storedx;
-        this.dy = this.storedy;
+        this.brickHit = 0;
+        this.dx = 3;
+        this.dy = -3;
+        this.paddleX = (this.canvas.width - this.paddleWidth) / 2;
     }
 }
