@@ -4,7 +4,7 @@ class Game {
         this.ctx = ctx;
         this.drawFunctions = new Draw(this.ctx, this.canvas);
         this.ballRadius = 10;
-        this.level = 1;
+        this.level = 3;
         this.x = this.canvas.width / 2;
         this.y = this.canvas.height - 30;
         this.dx = 3 * this.level;
@@ -29,8 +29,8 @@ class Game {
         this.winSound = new Audio("assets/Audio/win.mp3");
         this.fallSound = new Audio("assets/Audio/fall.mp3");
         this.brickHit = 0;
-        this.storedx = 0;
-        this.storedy = 0;
+        this.storedx = 3;
+        this.storedy = -3;
         this.bricks = [];
 
         this.createBricks();
@@ -169,7 +169,8 @@ class Game {
         this.createBricks();
         this.x = this.canvas.width / 2;
         this.y = this.canvas.height - 30;
-        this.dx = this.storedx;
-        this.dy = this.storedy;
+        this.dx = 3 * this.level;
+        this.dy = -3 * this.level;
+        this.paddleX = (this.canvas.width - this.paddleWidth) / 2;
     }
 }
