@@ -2,6 +2,11 @@ class Draw {
     constructor(ctx, canvas) {
         this.ctx = ctx;
         this.canvas = canvas;
+        this.defaultFillColor = "#C25800";
+        this.defaultBorderColor = "#663300";
+        this.defaultBorderWidth = 2;
+        this.defaultTextColor = "#0095DD";
+        this.defaultFont = "16px Arial";
     }
 
     clearCanvas() {
@@ -11,16 +16,22 @@ class Draw {
     drawBall(x, y, ballRadius) {
         this.ctx.beginPath();
         this.ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
-        this.ctx.fillStyle = "#C25800";
+        this.ctx.fillStyle = this.defaultFillColor;
         this.ctx.fill();
+        this.ctx.strokeStyle = this.defaultBorderColor;
+        this.ctx.lineWidth = this.defaultBorderWidth;
+        this.ctx.stroke();
         this.ctx.closePath();
     }
 
     drawPaddle(paddleX, paddleWidth, paddleHeight) {
         this.ctx.beginPath();
         this.ctx.rect(paddleX, this.canvas.height - paddleHeight, paddleWidth, paddleHeight);
-        this.ctx.fillStyle = "#C25800";
+        this.ctx.fillStyle = this.defaultFillColor;
         this.ctx.fill();
+        this.ctx.strokeStyle = this.defaultBorderColor;
+        this.ctx.lineWidth = this.defaultBorderWidth;
+        this.ctx.stroke();
         this.ctx.closePath();
     }
 
@@ -35,10 +46,13 @@ class Draw {
                     this.ctx.beginPath();
                     this.ctx.rect(brickX, brickY, brickWidth, brickHeight);
                     if (bricks[c][r].isBonus === 0)
-                        this.ctx.fillStyle = "#C25800";
+                        this.ctx.fillStyle = this.defaultFillColor;
                     else
-                        this.ctx.fillStyle = "#FF8C00";
+                        this.ctx.fillStyle = "#FF8C00"; // Cor alternativa para bônus
                     this.ctx.fill();
+                    this.ctx.strokeStyle = this.defaultBorderColor;
+                    this.ctx.lineWidth = this.defaultBorderWidth;
+                    this.ctx.stroke();
                     this.ctx.closePath();
                 }
             }
@@ -46,8 +60,8 @@ class Draw {
     }
 
     drawText(text, x, y) {
-        this.ctx.font = "16px Arial";
-        this.ctx.fillStyle = "#0095DD";
+        this.ctx.font = this.defaultFont;
+        this.ctx.fillStyle = this.defaultTextColor;
         this.ctx.fillText(text, x, y);
     }
 }
