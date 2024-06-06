@@ -7,8 +7,8 @@ class Game {
         this.level = 1;
         this.x = this.canvas.width / 2;
         this.y = this.canvas.height - 30;
-        this.dx = 3;
-        this.dy = -3;
+        this.dx = 5;
+        this.dy = -5;
         this.paddleHeight = 10;
         this.paddleWidth = 100;
         this.paddleX = (this.canvas.width - this.paddleWidth) / 2;
@@ -29,8 +29,8 @@ class Game {
         this.winSound = new Audio("assets/Audio/win.mp3");
         this.fallSound = new Audio("assets/Audio/fall.mp3");
         this.brickHit = 0;
-        this.storedx = 3; 
-        this.storedy = -3; 
+        this.storedx = 5; 
+        this.storedy = -5; 
         this.bricks = [];
 
         this.createBricks();
@@ -147,8 +147,8 @@ class Game {
                     this.fallSound.play();
                     this.x = this.canvas.width / 2;
                     this.y = this.canvas.height - 30;
-                    this.dx = this.storedx;
-                    this.dy = this.storedy;
+                    this.dx = this.storedx + 2;
+                    this.dy = this.storedy - 2;
                     this.paddleX = (this.canvas.width - this.paddleWidth) / 2;
                 }
             }
@@ -174,8 +174,8 @@ class Game {
         this.x = this.canvas.width / 2;
         this.y = this.canvas.height - 30;
         this.brickHit = 0;
-        this.dx = 3;
-        this.dy = -3;
+        this.dx = 5 + 2;
+        this.dy = -5 - 2;
         this.paddleX = (this.canvas.width - this.paddleWidth) / 2;
     }
 }
